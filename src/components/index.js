@@ -52,6 +52,7 @@ export default class App extends Component {
   componentWillUnmount () {
     this.removeListener()
   }
+  
   render() {
     return this.state.loading === true ? <h1>Loading</h1> : (
       <BrowserRouter>
@@ -60,7 +61,7 @@ export default class App extends Component {
             <nav className="navbar navbar-default navbar-static-top">
               <div className="container">
                 <div className="navbar-header">
-                  <Link to="/" className="navbar-brand">React Router + Firebase Auth</Link>
+                  <Link to="/" className="navbar-brand">My notebook</Link>
                 </div>
                 <ul className="nav navbar-nav pull-right">
                   <li>
