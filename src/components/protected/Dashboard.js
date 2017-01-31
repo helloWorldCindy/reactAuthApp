@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import { ref } from '../../config/constants'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -34,26 +33,6 @@ class Dashboard extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    // var newItem = {
-    //   text: this.state.text,
-    //   id: Date.now()
-    // }
-    // firebase.auth().onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     debugger
-    //     ref.child(`users/${user.uid}/info/items`).push({
-    //     text: newItem.text,
-    //     id: newItem.id
-    //     });
-    //   } else {
-    //     console.log("user is not login")
-    //   }
-    // });
-    // this.setState((prevState) => ({
-    //   items: prevState.items.concat(newItem),
-    //   text: ''
-    // }));
-    // this.setState({text: ""});
     var userId = firebase.auth().currentUser.uid;
     var newItem = {
       text: this.state.text,
