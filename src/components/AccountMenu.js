@@ -22,7 +22,6 @@ export default class AccountMenu extends React.Component {
 
   componentWillMount () {
    var userId = firebase.auth().currentUser.uid;
-   console.log(userId)
     return firebase.database().ref('/users/' + userId + '/info').on('value', function(snapshot) {
       this.setState({name: snapshot.val().name, img: snapshot.val().img })
     }.bind(this));
