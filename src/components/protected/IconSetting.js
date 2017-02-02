@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
 import RaisedButton from 'material-ui/RaisedButton'
 import firebase from 'firebase'
-import AvatarCropper from "react-avatar-cropper";
+import AvatarCropper from "react-avatar-cropper"
+import TextField from 'material-ui/TextField'
 
 
 export default class IconSetting extends Component {
@@ -12,15 +13,23 @@ export default class IconSetting extends Component {
       files: [],
       url: '',
       uri: '',
+      name: '',
       cropperOpen: false,
       showPicture: false
     }
   }
 
+   componentWillMount () {
+   var userId = firebase.auth().currentUser.uid;
+    return firebase.database().ref('/users/' + userId + '/info').on('value', function(snapshot) {
+      this.setState({name: snapshot.val().name})
+    }.bind(this));
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     var userId = firebase.auth().currentUser.uid;
-    firebase.database().ref('users/' + userId + '/info' ).update({img:this.state.url}).then(()=>alert("Success!"))
+    firebase.database().ref('users/' + userId + '/info' ).update({img:this.state.url}).then(()=>alert("Change picture Success!"))
   }
 
 
@@ -49,17 +58,30 @@ export default class IconSetting extends Component {
     });
   }
 
+  handleChangeName = (e) => {
+    var userId = firebase.auth().currentUser.uid;
+    firebase.database().ref('users/' + userId + '/info' ).update({name:this.state.name}).then(()=>alert("Change ID Success!"))
+  }
   render () {
     return (
       <div>
       <h1>Upload your profolio picture!</h1>
+      <div>
+        <h4> Reset your name : </h4>
+          <TextField       
+            hintText={"Your current name: " + this.state.name}
+            onChange={(e,value) => this.setState({name: e.target.value})}/>
+          <RaisedButton style={{align: "center"}}type="submit" label="Submit" primary={true}
+            onMouseDown={this.handleChangeName}/> 
+        </div>
       <div style={{display:"flex"}}>
         <form onSubmit={this.handleSubmit}>
-        <Dropzone onDrop={this.onDrop} >
-          <div>Try dropping some files here, or click to select files to upload.</div>
-        </Dropzone>
-        <br/>
-        <RaisedButton style={{align: "center"}}type="submit" label="Submit" primary={true} /> 
+        <div>
+          <Dropzone onDrop={this.onDrop} >
+            <div>Try dropping some files here, or click to select files to upload.</div>
+          </Dropzone>
+          <RaisedButton style={{align: "center"}}type="submit" label="Submit" primary={true} /> 
+        </div>
       </form>
        {this.state.files ? 
         <div>
