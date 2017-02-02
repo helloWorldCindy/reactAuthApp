@@ -30,8 +30,7 @@ export function signInGoogle () {
     ref.child(`users/${user.uid}/info`).set({
       email: user.email,
       name: user.email,
-      uid: user.uid,
-      img: ''
+      uid: user.uid
     });
   }).catch(function(error) {
     console.log(error.message)
