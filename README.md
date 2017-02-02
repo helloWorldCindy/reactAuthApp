@@ -18,3 +18,4 @@ This is an example repo for authenticating with Firebase and React Router.
 
 ### Todo:
 * Create Form
+* Loading while fetching data
