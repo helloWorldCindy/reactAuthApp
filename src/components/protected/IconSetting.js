@@ -18,11 +18,9 @@ export default class IconSetting extends Component {
   }
 
   handleSubmit = (e) => {
+    e.preventDefault();
     var userId = firebase.auth().currentUser.uid;
-    console.log(this.state.files)
-    firebase.database().ref('users/' + userId + '/info/img' ).push(this.state.url).then(function(snapshot) {
-      console.log('Uploaded a blob or file!');
-    });
+    firebase.database().ref('users/' + userId + '/info' ).update({img:this.state.url}).then(()=>alert("Success!"))
   }
 
 

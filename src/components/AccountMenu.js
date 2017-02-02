@@ -3,9 +3,10 @@ import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import FontIcon from 'material-ui/FontIcon';
 import firebase from 'firebase'
 import { Link } from 'react-router'
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
 
 export default class AccountMenu extends React.Component {
 
@@ -15,15 +16,15 @@ export default class AccountMenu extends React.Component {
     this.state = {
       open: false,
       name: '',
-      email: ''
+      img: ''
     };
   }
 
   componentWillMount () {
    var userId = firebase.auth().currentUser.uid;
+   console.log(userId)
     return firebase.database().ref('/users/' + userId + '/info').on('value', function(snapshot) {
-      this.setState({name: snapshot.val().name,
-                    email: snapshot.val().email})
+      this.setState({name: snapshot.val().name, img: snapshot.val().img })
     }.bind(this));
   }
 
@@ -49,8 +50,8 @@ export default class AccountMenu extends React.Component {
         <FlatButton
           onTouchTap={this.handleTouchTap}
           label={"User: \n" + this.state.name}
-          labelStyle={{color: 'white',fontWeight:'bold'}}
-          icon={<FontIcon className="material-icons" style={{color: "white"}}>account_circle</FontIcon>} />
+          icon={this.state.img==="" ? <FontIcon className="material-icons" style={{color: "white"}}>account_circle</FontIcon> : null }
+          labelStyle={{color: 'white',fontWeight:'bold'}}>{this.state.img === "" ? null : <Avatar src={this.state.img} size={30}/>}</FlatButton>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}

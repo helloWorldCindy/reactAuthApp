@@ -36,7 +36,8 @@ export default class Register extends Component {
         ref.child(`users/${user.uid}/info`).set({
         email: user.email,
         name: this.state.name,
-        uid: user.uid
+        uid: user.uid,
+        img: ''
       });
     })
     .catch((error) => {
