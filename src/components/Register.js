@@ -45,8 +45,11 @@ export default class Register extends Component {
       if(error.code === "auth/invalid-email"){
         this.setState({errorMessageEmail: "email adress invalid"})
       }
-      if("auth/weak-password"){
+      if(error.code === "auth/weak-password"){
         this.setState({errorMessagePw: "Password should be at least 6 characters"})
+      }
+      if(error.code === "auth/email-already-in-use"){
+        this.setState({errorMessageEmail: "The email address is already in use by another account."})
       }
     })
     }
