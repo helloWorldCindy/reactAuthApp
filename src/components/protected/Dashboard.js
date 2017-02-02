@@ -6,7 +6,9 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       items: [], 
-      text: ''
+      text: '',
+      files: [],
+      url:''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

@@ -5,8 +5,12 @@ import Login from './Login'
 import Register from './Register'
 import Home from './Home'
 import Dashboard from './protected/Dashboard'
+import IconSetting from './protected/IconSetting'
 import { logout } from '../helpers/auth'
 import { firebaseAuth } from '../config/constants'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import AccountMenu from './AccountMenu'
+import CircularProgress from 'material-ui/CircularProgress'
 
 function MatchWhenAuthed ({component: Component, authed, ...rest}) {
   return (
@@ -54,35 +58,30 @@ export default class App extends Component {
   }
   
   render() {
-    return this.state.loading === true ? <h1>Loading</h1> : (
+    return this.state.loading === true ? <MuiThemeProvider><CircularProgress size={80} thickness={5} /></MuiThemeProvider> : (
       <BrowserRouter>
         {({router}) => (
+          <MuiThemeProvider>
           <div>
-            <nav className="navbar navbar-default navbar-static-top">
-              <div className="container">
+            <nav className="navbar navbar-default navbar-static-top ">
+              <div className="container" style={{marginTop: 10}}>
                 <div className="navbar-header">
-                  <Link to="/" className="navbar-brand">My notebook</Link>
+                  <Link to="/" className="navbar-brand" >My notebook</Link>
                 </div>
                 <ul className="nav navbar-nav pull-right">
                   <li>
-                    <Link to="/" className="navbar-brand">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/dashboard" className="navbar-brand">Dashboard</Link>
+                    {this.state.authed? <Link to="/Dashboard" className="navbar-brand">Dashboard</Link> : null}
                   </li>
                   <li>
                     {this.state.authed
-                      ? <button
-                          style={{border: 'none', background: 'transparent'}}
+                      ? <div><AccountMenu
                           onClick={() => {
                             logout()
                             this.setState({authed: false})
                             router.transitionTo('/')
-                          }}
-                          className="navbar-brand">Logout</button>
+                          }} /></div>
                       : <span>
                           <Link to="/login" className="navbar-brand">Login</Link>
-                          <Link to="/register" className="navbar-brand">Register</Link>
                         </span>}
                   </li>
                 </ul>
@@ -94,10 +93,12 @@ export default class App extends Component {
                 <MatchWhenUnauthed authed={this.state.authed} pattern='/login' component={Login} />
                 <MatchWhenUnauthed authed={this.state.authed} pattern='/register' component={Register} />
                 <MatchWhenAuthed authed={this.state.authed} pattern='/dashboard' component={Dashboard} />
+                <MatchWhenAuthed authed={this.state.authed} pattern='/IconSetting' component={IconSetting} />
                 <Miss render={() => <h3>No Match</h3>} />
               </div>
             </div>
           </div>
+          </MuiThemeProvider>
         )}
       </BrowserRouter>
     );
