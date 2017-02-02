@@ -71,6 +71,7 @@ export default class IconSetting extends Component {
           <TextField       
             hintText={"Your current name: " + this.state.name}
             onChange={(e,value) => this.setState({name: e.target.value})}/>
+          <br/>
           <RaisedButton style={{align: "center"}}type="submit" label="Submit" primary={true}
             onMouseDown={this.handleChangeName}/> 
         </div>
