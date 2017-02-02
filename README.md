@@ -17,6 +17,5 @@ This is an example repo for authenticating with Firebase and React Router.
 * Visit ```localhost:3000```
 
 ### Todo:
-*Email Verification
-*Create Form
-*Let user reset name
+* Create Form
+* Let user reset name
