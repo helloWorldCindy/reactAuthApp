@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import CreateContext from './CreateContext'
-import Tags from './Tags'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -55,10 +54,7 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div>
         <CreateContext />
-        <Tags />
-      </div>
     );
   }
 }

@@ -1,52 +1,73 @@
 import React, { Component } from 'react'
+import Chip from 'material-ui/Chip'
+import TextField from 'material-ui/TextField'
 
 class Tags extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {items: [], text: ''};
+    this.styles = {
+      chip: {
+        margin: 4,
+      },
+      wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+    }
   }
 
-  render() {
-    return (
-      <div>
-        <h3>TODO</h3>
-        <TodoList items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.handleChange} value={this.state.text} />
-          <button>{'Add #' + (this.state.items.length + 1)}</button>
-        </form>
-      </div>
-    );
-  }
-
-  handleChange(e) {
-    this.setState({text: e.target.value});
-  }
 
   handleSubmit(e) {
     e.preventDefault();
     var newItem = {
       text: this.state.text,
-      id: Date.now()
+      key: this.state.items.length
     };
     this.setState((prevState) => ({
       items: prevState.items.concat(newItem),
       text: ''
     }));
   }
-}
 
-class TodoList extends React.Component {
+  handleRequestDelete = (key) => {
+    console.log(this.state.items)
+    this.chipData = this.state.items;
+    const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
+    this.chipData.splice(chipToDelete, 1);
+    this.setState({items: this.chipData});
+  };
+
+  renderChip(data) {
+    return (
+      <Chip
+        key={data.key}
+        onRequestDelete={() => this.handleRequestDelete(data.key)}
+        style={this.styles.chip}
+      >
+        {data.text}
+      </Chip>
+    );
+  }
+
   render() {
     return (
-      <ul>
-        {this.props.items.map(item => (
-          <li key={item.id}>{item.text}</li>
-        ))}
-      </ul>
+      <div>
+        <div style={this.styles.wrapper}>
+          {this.state.items.map(this.renderChip, this)}
+        </div>
+        <TextField 
+          onChange={(e)=>{this.setState({text: e.target.value})}}
+          onKeyPress={(e)=>{
+            if(e.key === "Enter") {
+              this.handleSubmit(e)
+            }
+          }} 
+          value={this.state.text}/>
+      </div>
     );
   }
 }
+
 export default Tags;

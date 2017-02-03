@@ -8,6 +8,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Dropzone from 'react-dropzone'
 import update from 'immutability-helper'
 import ReactRpg from '../../helpers/react-rpg'
+import Tags from './Tags'
 
 export default class CreateContext extends Component {
   constructor(props) {
@@ -70,6 +71,7 @@ export default class CreateContext extends Component {
           multiLine={true}
           row={2}
           floatingLabelText="Share your thoughts in here..."/>
+          <Tags /> 
         </div>
     }
     return (
