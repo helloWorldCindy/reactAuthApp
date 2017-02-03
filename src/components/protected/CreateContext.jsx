@@ -19,24 +19,31 @@ export default class CreateContext extends Component {
       url: []
     }
   }
+  //open edit area
   handleOpen = (e) => {
     this.setState({editing: true})
   }
+  //close edit area with saving data
   handleSaveClose = (e) => {
     this.setState({editing: false})
   }
+  //close edit area without saving data
   handleUnsaveClose = (e) => {
     this.setState({editing: false})
   }
+  //called when the user drop pics in drop zone
   onDrop = (file) => {
+    //update this.state.files
     let newFileArray = update(this.state.files, {$push: file})
     let urlArray
+    //update this.state.url
     this.setState({files : newFileArray},() => {
       urlArray = update(this.state.url, {$push: [this.state.files[this.state.files.length-1].preview]})
       this.setState({url: urlArray})
     })
   }
   render () {
+    //when the edit area is opened, the button shows save
     let appBarButton
     if(this.state.editing){
       appBarButton = <FlatButton label="Save" 
@@ -44,19 +51,27 @@ export default class CreateContext extends Component {
       icon={<FontIcon className="material-icons" style={{color: "white"}}>save</FontIcon> }
       onTouchTap={this.handleSaveClose}/>
     } else {
+      //when the edit area is closed, the button shows edit
       appBarButton = <FlatButton label="Edit" 
       labelStyle={{fontWeight: "bold"}}
       icon={<FontIcon className="material-icons" style={{color: "white"}}>edit</FontIcon> }
       onTouchTap={this.handleOpen}/>
     }
+    //create urlArray for passing to ReactRpg
     let urlArray = []
     let item = {}
     this.state.url.forEach((imgUrl)=>{
       item = {
         url: imgUrl,
-        hoverHandler: (url, obj) => { console.log(url) }}
-      urlArray.push(item)
+        deleteHandler: (key)=>{
+          this.setState({
+            url: update(this.state.url, {$splice: [[key, 1]]})
+          })
+        }
+    }
+    urlArray.push(item)
     })
+    //variable display contains dropzone, images, TextField and Tags area
     let display
     if(this.state.editing)
     {
@@ -69,7 +84,6 @@ export default class CreateContext extends Component {
           </div>
           <TextField
           multiLine={true}
-          row={2}
           floatingLabelText="Share your thoughts in here..."/>
           <Tags /> 
         </div>

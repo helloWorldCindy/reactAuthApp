@@ -1,41 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react'
+import './react-rpg.css'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 
-const ReactRpgPhoto = ({ url, padding, clickHandler = null, hoverHandler = null }) => {
-  const pointer = clickHandler || hoverHandler ? 'pointer' : 'auto';
-
-  const styles = {
-    imageGridItem: {
-      display: 'inline-block',
-      boxSizing: 'border-box',
-      float: 'left',
-      padding,
-    },
-    imageWrapper: {
-      position: 'relative',
-      width: '100%',
-      paddingBottom: '100%',
-      backgroundImage: `url(${url})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center center',
-      backgroundRepeat: 'no-repeat',
-      cursor: pointer,
-    },
-  };
-
-  return (
-    <div className="imageGridItem" style={styles.imageGridItem}>
-      <a onClick={ clickHandler ? clickHandler.bind(this, url) : null } onMouseEnter={hoverHandler ? hoverHandler.bind(this,url) : null}>
-        <div className="imageWrapper" style={styles.imageWrapper}></div>
-      </a>
-    </div>
-  );
+export default class ReactRpgPhoto extends Component {
+  render(){
+    return (
+          <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <div className="hovereffect">
+              <img className="img-responsive" src={this.props.url} alt="" />
+              <div className="overlay" >
+                <h2>Delete</h2>
+                <IconButton iconStyle={{color: "white"}} onMouseDown={(e)=>{this.props.deleteHandler(this.props.index)}}>
+                  <FontIcon className="material-icons" style={{color: "white"}}>delete_forever</FontIcon>
+                </IconButton>
+              </div>
+          </div>
+        </div>
+    );
+  }
 };
 
 ReactRpgPhoto.propTypes = {
   url: React.PropTypes.string.isRequired,
   padding: React.PropTypes.number,
   clickHandler: React.PropTypes.func,
-  hoverHanlder: React.PropTypes.func
+  deleteHandler: React.PropTypes.func,
+  index: React.PropTypes.number
 };
-
-export default ReactRpgPhoto;

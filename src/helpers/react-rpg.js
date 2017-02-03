@@ -4,8 +4,8 @@ import ReactRpgPhoto from './react-rpg-photo';
 const ReactRpg = ({ imagesArray, padding = 0, columns = [1, 2, 3] }) => {
   const imageNodes = imagesArray.map((arr, index) => {
     return (
-      <ReactRpgPhoto key={index} url={arr.url} columns={columns} padding={padding} clickHandler={arr.clickHandler}
-      hoverHandler={arr.hoverHandler} />
+      <ReactRpgPhoto key={index} url={arr.url} columns={columns} padding={padding} 
+      clickHandler={arr.clickHandler} deleteHandler={arr.deleteHandler} index={index}/>
     );
   });
 

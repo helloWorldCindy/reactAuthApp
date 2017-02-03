@@ -64,7 +64,8 @@ class Tags extends Component {
               this.handleSubmit(e)
             }
           }} 
-          value={this.state.text}/>
+          value={this.state.text}
+          floatingLabelText="Enter tags"/>
       </div>
     );
   }
