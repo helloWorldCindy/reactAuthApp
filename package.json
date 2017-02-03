@@ -14,7 +14,8 @@
     "react-dom": "^15.4.0",
     "react-dropzone": "^3.9.2",
     "react-image-crop": "^2.0.2",
-    "react-router": "^4.0.0-alpha.5"
+    "react-router": "^4.0.0-alpha.5",
+    "react-rpg": "^2.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

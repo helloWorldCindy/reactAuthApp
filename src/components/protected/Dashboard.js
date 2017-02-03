@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
+import CreateContext from './CreateContext'
+import Tags from './Tags'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -54,26 +56,9 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-          <div>
-            <TodoList items={this.state.items} />
-            <form onSubmit={this.handleSubmit}>
-              <input onChange={this.handleChange} value={this.state.text} />
-              <button>{'Add #' + (this.state.items.length + 1)}</button>
-            </form>
-          </div>
+        <CreateContext />
+        <Tags />
       </div>
-    );
-  }
-}
-
-class TodoList extends React.Component {
-  render() {
-    return (
-      <ul>
-        {this.props.items.map(item => (
-          <li key={item.key}>{item.text}</li>
-        ))}
-      </ul>
     );
   }
 }
