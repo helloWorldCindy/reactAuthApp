@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
+import firebase from 'firebase'
 
 class Tags extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {items: [], text: ''};
+    this.state = {items: this.props.value, text: ''}
     this.styles = {
       chip: {
         margin: 4,
@@ -51,7 +52,11 @@ class Tags extends Component {
     );
   }
 
+
   render() {
+    if(this.props.submit){
+      this.props.onSubmit(this.state.items)
+    }
     return (
       <div>
         <div style={this.styles.wrapper}>
@@ -71,4 +76,8 @@ class Tags extends Component {
   }
 }
 
+Tags.propTypes = {
+  submit: React.PropTypes.bool,
+  onSubmit: React.PropTypes.func
+}
 export default Tags;

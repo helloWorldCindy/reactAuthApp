@@ -9,6 +9,7 @@ import Dropzone from 'react-dropzone'
 import update from 'immutability-helper'
 import ReactRpg from '../../helpers/react-rpg'
 import Tags from './Tags'
+import firebase from 'firebase'
 
 export default class CreateContext extends Component {
   constructor(props) {
@@ -16,16 +17,33 @@ export default class CreateContext extends Component {
     this.state = {
       editing: false,
       files: [],
-      url: []
+      url: [],
+      description: "",
+      save: false,
+      tags: []
     }
   }
   //open edit area
   handleOpen = (e) => {
+    this.setState({save: false})
     this.setState({editing: true})
   }
   //close edit area with saving data
   handleSaveClose = (e) => {
-    this.setState({editing: false})
+    this.setState({save: true})
+  }
+  handleSubmit = (tags) => {
+    var userId = firebase.auth().currentUser.uid;
+    firebase.database().ref('users/' + userId + '/data' ).push({
+      images: this.state.url,
+      description: this.state.description,
+      tags: tags
+    }).then(this.setState({
+      editing: false,
+      files: [],
+      url: [],
+      description: "",
+      save: false}))
   }
   //close edit area without saving data
   handleUnsaveClose = (e) => {
@@ -84,8 +102,9 @@ export default class CreateContext extends Component {
           </div>
           <TextField
           multiLine={true}
+          onChange={(e)=>{this.setState({description: e.target.value})}}
           floatingLabelText="Share your thoughts in here..."/>
-          <Tags /> 
+          <Tags submit={this.state.save} onSubmit={this.handleSubmit} value={this.state.tags}/> 
         </div>
     }
     return (
