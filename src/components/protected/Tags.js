@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
-import firebase from 'firebase'
 
 class Tags extends Component {
   constructor(props) {

@@ -20,7 +20,8 @@ export default class CreateContext extends Component {
       url: [],
       description: "",
       save: false,
-      tags: []
+      tags: [],
+      title: ""
     }
   }
   //open edit area
@@ -34,16 +35,21 @@ export default class CreateContext extends Component {
   }
   handleSubmit = (tags) => {
     var userId = firebase.auth().currentUser.uid;
+    let currentDate = new Date().toString()
     firebase.database().ref('users/' + userId + '/data' ).push({
       images: this.state.url,
       description: this.state.description,
-      tags: tags
+      tags: tags,
+      title: this.state.title,
+      time: currentDate
     }).then(this.setState({
       editing: false,
       files: [],
       url: [],
       description: "",
-      save: false}))
+      save: false,
+      title: ""}))
+    debugger
   }
   //close edit area without saving data
   handleUnsaveClose = (e) => {
@@ -112,8 +118,9 @@ export default class CreateContext extends Component {
       <AppBar 
         title={this.state.editing ? <TextField hintText="Enter title ..."
                 underlineShow={false}
-                inputStyle={{color: "white",fontSize: 20, fontWeight: "bold"}}/> : "Share your favs from here ..."}
-        iconElementLeft={this.state.editing ? <IconButton><NavigationClose /></IconButton> : <div />}
+                inputStyle={{color: "white",fontSize: 20, fontWeight: "bold"}}
+                onChange={(e)=>{this.setState({title: e.target.value})}}/> : "Share your favs from here ..."}
+        iconElementLeft={this.state.editing ? <IconButton onMouseDown={this.handleUnsaveClose}><NavigationClose /></IconButton> : <div />}
         iconElementRight={appBarButton} />
         {display}
       </div>  
