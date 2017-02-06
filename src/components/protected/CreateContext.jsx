@@ -9,6 +9,7 @@ import Dropzone from 'react-dropzone'
 import update from 'immutability-helper'
 import ReactRpg from '../../helpers/react-rpg'
 import Tags from './Tags'
+import DisplayContext from './DisplayContext'
 import firebase from 'firebase'
 
 export default class CreateContext extends Component {
@@ -21,7 +22,7 @@ export default class CreateContext extends Component {
       description: "",
       save: false,
       tags: [],
-      title: ""
+      title: "Unnamed"
     }
   }
   //open edit area
@@ -48,8 +49,7 @@ export default class CreateContext extends Component {
       url: [],
       description: "",
       save: false,
-      title: ""}))
-    debugger
+      title: "Unnamed"}))
   }
   //close edit area without saving data
   handleUnsaveClose = (e) => {
@@ -123,6 +123,7 @@ export default class CreateContext extends Component {
         iconElementLeft={this.state.editing ? <IconButton onMouseDown={this.handleUnsaveClose}><NavigationClose /></IconButton> : <div />}
         iconElementRight={appBarButton} />
         {display}
+      {this.state.editing ? null : <DisplayContext />}
       </div>  
     )
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
-import { Match, BrowserRouter, Link, Miss, Redirect } from 'react-router'
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom'
 import Login from './Login'
 import Register from './Register'
 import Home from './Home'
@@ -14,7 +14,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 
 function MatchWhenAuthed ({component: Component, authed, ...rest}) {
   return (
-    <Match
+    <Route
       {...rest}
       render={(props) => authed === true
         ? <Component {...props} />
@@ -25,7 +25,7 @@ function MatchWhenAuthed ({component: Component, authed, ...rest}) {
 
 function MatchWhenUnauthed ({component: Component, authed, ...rest}) {
   return (
-    <Match
+    <Route
       {...rest}
       render={(props) => authed === false
         ? <Component {...props} />
@@ -59,8 +59,7 @@ export default class App extends Component {
   
   render() {
     return this.state.loading === true ? <MuiThemeProvider><CircularProgress size={80} thickness={5} /></MuiThemeProvider> : (
-      <BrowserRouter>
-        {({router}) => (
+      <Router>
           <MuiThemeProvider>
           <div>
             <nav className="navbar navbar-default navbar-static-top ">
@@ -70,16 +69,16 @@ export default class App extends Component {
                 </div>
                 <ul className="nav navbar-nav pull-right">
                   <li>
-                    {this.state.authed? <Link to="/Dashboard" className="navbar-brand">Dashboard</Link> : null}
+                    {this.state.authed? <Link to="/dashboard" className="navbar-brand">Dashboard</Link> : null}
                   </li>
                   <li>
                     {this.state.authed
-                      ? <div><AccountMenu
+                      ? <AccountMenu
                           onClick={() => {
                             logout()
                             this.setState({authed: false})
-                            router.transitionTo('/')
-                          }} /></div>
+                            Router.transitionTo('/')
+                          }} />
                       : <span>
                           <Link to="/login" className="navbar-brand">Login</Link>
                         </span>}
@@ -89,18 +88,19 @@ export default class App extends Component {
             </nav>
             <div className="container">
               <div className="row">
-                <Match pattern='/' exactly component={Home} />
-                <MatchWhenUnauthed authed={this.state.authed} pattern='/login' component={Login} />
-                <MatchWhenUnauthed authed={this.state.authed} pattern='/register' component={Register} />
-                <MatchWhenAuthed authed={this.state.authed} pattern='/dashboard' component={Dashboard} />
-                <MatchWhenAuthed authed={this.state.authed} pattern='/IconSetting' component={IconSetting} />
-                <Miss render={() => <h3>No Match</h3>} />
+                <Switch>
+                  <Route exact path='/' component={Home} />
+                  <MatchWhenUnauthed authed={this.state.authed} path='/login' component={Login} />
+                  <MatchWhenUnauthed authed={this.state.authed} path='/register' component={Register} />
+                  <MatchWhenAuthed authed={this.state.authed} path='/dashboard' component={Dashboard} />
+                  <MatchWhenAuthed authed={this.state.authed} path='/IconSetting' component={IconSetting} />
+                  <Route render={() => <h3>No Match</h3>} />
+                </Switch>
               </div>
             </div>
           </div>
           </MuiThemeProvider>
-        )}
-      </BrowserRouter>
+      </Router>
     );
   }
 }
