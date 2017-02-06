@@ -29,7 +29,7 @@ export default class IconSetting extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     var userId = firebase.auth().currentUser.uid;
-    firebase.database().ref('users/' + userId + '/info' ).update({img:this.state.url}).then(()=>alert("Change picture Success!"))
+    firebase.database().ref('users/' + userId + '/info' ).update({img:this.state.url})
   }
 
 

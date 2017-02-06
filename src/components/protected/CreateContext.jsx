@@ -100,7 +100,7 @@ export default class CreateContext extends Component {
     if(this.state.editing)
     {
       display = <div>
-          <div>
+          <div style={{marginTop: 20, marginBottom: 20}}>
             <Dropzone onDrop={this.onDrop} >
               <div>Try dropping some files here, or click to select files to upload.</div>
             </Dropzone>
@@ -115,15 +115,18 @@ export default class CreateContext extends Component {
     }
     return (
       <div>
-      <AppBar 
-        title={this.state.editing ? <TextField hintText="Enter title ..."
-                underlineShow={false}
-                inputStyle={{color: "white",fontSize: 20, fontWeight: "bold"}}
-                onChange={(e)=>{this.setState({title: e.target.value})}}/> : "Share your favs from here ..."}
-        iconElementLeft={this.state.editing ? <IconButton onMouseDown={this.handleUnsaveClose}><NavigationClose /></IconButton> : <div />}
-        iconElementRight={appBarButton} />
-        {display}
-      {this.state.editing ? null : <DisplayContext />}
+        <AppBar 
+          title={ this.state.editing ? <TextField hintText="Enter title ..."
+                  underlineShow={false}
+                  inputStyle={{color: "white",fontSize: 20, fontWeight: "bold"}}
+                  onChange={(e)=>{this.setState({title: e.target.value})}}
+                  hintStyle={{fontSize: 20}} /> : "Share your favs from here ..."}
+          iconElementLeft={this.state.editing ? <IconButton onMouseDown={this.handleUnsaveClose}><NavigationClose /></IconButton> : <div />}
+          iconElementRight={appBarButton} />
+          {display}
+        <div style={{marginTop: 20, marginBottom:20}} >
+          <DisplayContext />
+        </div>
       </div>  
     )
   }

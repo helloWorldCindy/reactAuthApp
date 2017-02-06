@@ -33,29 +33,58 @@ export default class DisplayContext extends Component {
 	displayTags (array) {
 		let tagsArray = []
 		array.forEach((tags)=>{
-			tagsArray.push(<Chip key={tags.key}> {tags.text} </Chip>)
+			tagsArray.push(<Chip style={{display: "inline-block", marginLeft: 5, marginRight: 5}} key={tags.key}> {tags.text} </Chip>)
 		})
 		return tagsArray
 	}
+
+	getStyle () {
+		let style ={
+			divStyle : {
+				border: "2px solid rgba(166, 228, 252, 1)",
+				borderRadius: 10,
+				marginTop: 20,
+				marginBottom: 20,
+				marginLeft: "auto",
+				marginRight: "auto",
+				display: "block"
+			}
+		}
+	return style
+	}
 	render(){
-		let displayBlock = this.state.datas.map((items) => 
-			<div key={items.key} style={{boder: "1px solid black"}}>
-				<li >
-					<p> {items.title} </p>
-					<p> {items.discription? items.discription : "No discription"}</p>
-					{ items.images? <ReactRpg imagesArray={this.getUrl(items.images)} columns={[ 1, 2, 5 ]} padding={10} /> : null}
-					{ items.tags ? this.displayTags(items.tags) : null}
-				</li>
-				<br/ >
-			</div>
-		)
+		let styles = this.getStyle()
+		let displayBlock = []
+		this.state.datas.forEach((data)=>{
+			displayBlock.push(
+				<div className="row" style={styles.divStyle} >
+					<div className="col-md-12" key={data.key}>
+						<h2> {data.title} </h2>
+						<p> {data.description? data.description : "No discription"}</p>
+						<div className="row">
+							<div className="col-md-12">
+								{ data.images? <ReactRpg imagesArray={this.getUrl(data.images)} columns={[ 1, 2, 5 ]} padding={10} /> : <p> No Picture </p>}
+							</div>
+						</div>
+						{ data.tags ?  
+							<div className="row">
+								<div className="col-md-12"> 
+									{this.displayTags(data.tags)} 
+								</div>
+							</div>: null}
+						<div className="row">
+							<div className="col-md-12">
+								<p style={{color: "#78797A"}}> created on : {data.time} </p>
+							</div>
+						</div>
+					</div>
+				</div>)
+		})
 
 
 		return(
-			<div>
-				<ul >
+			<div className="container" style={{display: "block"}}>
 						{displayBlock}
-				</ul>
 			</div>)
 	}
 }
