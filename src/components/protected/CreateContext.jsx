@@ -43,7 +43,8 @@ export default class CreateContext extends Component {
       tags: tags,
       title: this.state.title,
       time: currentDate
-    }).then(this.setState({
+    }).then(
+      this.setState({
       editing: false,
       files: [],
       url: [],
@@ -62,11 +63,45 @@ export default class CreateContext extends Component {
     let urlArray
     //update this.state.url
     this.setState({files : newFileArray},() => {
-      urlArray = update(this.state.url, {$push: [this.state.files[this.state.files.length-1].preview]})
+      urlArray = update(this.state.url, {$push: [{url:this.state.files[this.state.files.length-1].preview,id:Date.now()}]})
       this.setState({url: urlArray})
     })
   }
+
+  getUrlArray = () => {
+    //create urlArray for passing to ReactRpg
+    let urlArray = []
+    let item = {}
+    this.state.url.forEach((imgUrl)=>{
+      item = {
+        url: imgUrl.url,
+        deleteHandler: (key)=>{
+          this.setState({
+            url: update(this.state.url, {$splice: [[key, 1]]})
+          })
+        }
+    }
+    urlArray.push(item)
+    })
+    return urlArray
+  }
+
+  getStyle () {
+    let style ={
+      divStyle : {
+        border: "2px solid rgba(166, 228, 252, 1)",
+        borderRadius: 10,
+        marginTop: 20,
+        marginBottom: 20,
+        marginLeft: "auto",
+        marginRight: "auto",
+        display: "block"
+      }
+    }
+    return style
+  }
   render () {
+    let styles = this.getStyle()
     //when the edit area is opened, the button shows save
     let appBarButton
     if(this.state.editing){
@@ -81,32 +116,24 @@ export default class CreateContext extends Component {
       icon={<FontIcon className="material-icons" style={{color: "white"}}>edit</FontIcon> }
       onTouchTap={this.handleOpen}/>
     }
-    //create urlArray for passing to ReactRpg
-    let urlArray = []
-    let item = {}
-    this.state.url.forEach((imgUrl)=>{
-      item = {
-        url: imgUrl,
-        deleteHandler: (key)=>{
-          this.setState({
-            url: update(this.state.url, {$splice: [[key, 1]]})
-          })
-        }
-    }
-    urlArray.push(item)
-    })
+
     //variable display contains dropzone, images, TextField and Tags area
     let display
     if(this.state.editing)
     {
-      display = <div>
-          <div style={{marginTop: 20, marginBottom: 20}}>
-            <Dropzone onDrop={this.onDrop} >
-              <div>Try dropping some files here, or click to select files to upload.</div>
-            </Dropzone>
-            <ReactRpg imagesArray={urlArray} padding={10} />
+      display = <div style={styles.divStyle}>
+          <div style={{marginTop: 20, marginBottom: 20, paddingLeft: 10}} className="row">
+            <div className="col-md-12">
+              <Dropzone onDrop={this.onDrop}>
+                <div>Try dropping some files here, or click to select files to upload.</div>
+              </Dropzone>
+            </div>
+          </div>
+          <div className="col-md-12">
+            <ReactRpg imagesArray={this.getUrlArray()} padding={10} />
           </div>
           <TextField
+          style={{paddingLeft: 10}}
           multiLine={true}
           onChange={(e)=>{this.setState({description: e.target.value})}}
           floatingLabelText="Share your thoughts in here..."/>

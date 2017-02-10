@@ -17,6 +17,11 @@ class Tags extends Component {
       },
     }
   }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.submit){
+      this.props.onSubmit(this.state.items)
+    }
+  }
 
 
   handleSubmit(e) {
@@ -53,9 +58,6 @@ class Tags extends Component {
 
 
   render() {
-    if(this.props.submit){
-      this.props.onSubmit(this.state.items)
-    }
     return (
       <div>
         <div style={this.styles.wrapper}>
@@ -68,6 +70,7 @@ class Tags extends Component {
               this.handleSubmit(e)
             }
           }} 
+          style={{paddingLeft: 10}}
           value={this.state.text}
           floatingLabelText="Enter tags"/>
       </div>

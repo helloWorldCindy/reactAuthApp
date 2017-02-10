@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import firebase from 'firebase'
 import { ReactRpg } from 'react-rpg'
 import Chip from 'material-ui/Chip'
+import RaisedButton from 'material-ui/RaisedButton'
+
 
 export default class DisplayContext extends Component {
 	constructor(props) {
@@ -12,8 +14,9 @@ export default class DisplayContext extends Component {
 	}
 	componentWillMount() {
 		var userId = firebase.auth().currentUser.uid;
-		var datas = [];
+		var datas;
 		firebase.database().ref('/users/' + userId + '/data').on('value', (snapshot) => {
+			datas = []
       snapshot.forEach((childSnapshot) => {
         var data = childSnapshot.val();
         data['key'] = childSnapshot.key;
@@ -25,7 +28,7 @@ export default class DisplayContext extends Component {
 	getUrl (array) {
 		let urlArray = []
 		array.forEach((img)=>{
-			var url = { url: img}
+			var url = { url: img.url}
 			urlArray.push(url)
 		})
 		return urlArray
@@ -57,9 +60,9 @@ export default class DisplayContext extends Component {
 		let displayBlock = []
 		this.state.datas.forEach((data)=>{
 			displayBlock.push(
-				<div className="row" style={styles.divStyle} >
-					<div className="col-md-12" key={data.key}>
-						<h2> {data.title} </h2>
+				<div className="row" style={styles.divStyle} key={data.key}>
+					<div className="col-md-12" >
+						<h2 style={{fontWeight: "bold"}}> {data.title} </h2>
 						<p> {data.description? data.description : "No discription"}</p>
 						<div className="row">
 							<div className="col-md-12">
@@ -77,8 +80,12 @@ export default class DisplayContext extends Component {
 								<p style={{color: "#78797A"}}> created on : {data.time} </p>
 							</div>
 						</div>
+						<RaisedButton primary={true} style={{marginBottom: 10}} label="Delete" onTouchTap={(e)=>{
+							var userId = firebase.auth().currentUser.uid
+							firebase.database().ref('/users/' + userId + '/data').child(data.key).remove()}} />
 					</div>
-				</div>)
+				</div>
+				)
 		})
 
 
