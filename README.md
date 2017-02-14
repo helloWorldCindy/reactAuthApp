@@ -17,5 +17,7 @@ This is an example repo for authenticating with Firebase and React Router.
 * Visit ```localhost:3000```
 
 ### Todo:
-* search bar and order
+* Add follower and followee system
+* Add email verification during registration
+* Photo can't load problem still need to be fixed
 * Loading while fetching data

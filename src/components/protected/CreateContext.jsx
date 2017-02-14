@@ -11,6 +11,8 @@ import ReactRpg from '../../helpers/react-rpg'
 import Tags from './Tags'
 import DisplayContext from './DisplayContext'
 import firebase from 'firebase'
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem'
 
 export default class CreateContext extends Component {
   constructor(props) {
@@ -22,7 +24,8 @@ export default class CreateContext extends Component {
       description: "",
       save: false,
       tags: [],
-      title: "Unnamed"
+      title: "Unnamed",
+      choice: 1
     }
   }
   //open edit area
@@ -42,6 +45,7 @@ export default class CreateContext extends Component {
       description: this.state.description,
       tags: tags,
       title: this.state.title,
+      choice: this.state.choice,
       time: currentDate
     }).then(
       this.setState({
@@ -50,6 +54,7 @@ export default class CreateContext extends Component {
       url: [],
       description: "",
       save: false,
+      choice: 1,
       title: "Unnamed"}))
   }
   //close edit area without saving data
@@ -100,6 +105,9 @@ export default class CreateContext extends Component {
     }
     return style
   }
+  handleSelectFieldChange = (event, index, value) => {
+    this.setState({choice: value})
+  }
   render () {
     let styles = this.getStyle()
     //when the edit area is opened, the button shows save
@@ -138,6 +146,14 @@ export default class CreateContext extends Component {
           onChange={(e)=>{this.setState({description: e.target.value})}}
           floatingLabelText="Share your thoughts in here..."/>
           <Tags submit={this.state.save} onSubmit={this.handleSubmit} value={this.state.tags}/> 
+          <div style={{paddingLeft: 10, marginTop: -20}}>
+            <SelectField floatingLabelText="Order by"
+              value={this.state.choice} onChange={this.handleSelectFieldChange}>
+              <MenuItem value={1} primaryText="Public" />
+              <MenuItem value={2} primaryText="Only friends can see" />
+              <MenuItem value={3} primaryText="Only I can see" />
+            </SelectField>
+          </div>
         </div>
     }
     return (

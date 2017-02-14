@@ -3,13 +3,17 @@ import firebase from 'firebase'
 import { ReactRpg } from 'react-rpg'
 import Chip from 'material-ui/Chip'
 import RaisedButton from 'material-ui/RaisedButton'
+import SearchBar from './SearchBar'
+import OrderData from './OrderData'
 
 
 export default class DisplayContext extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			datas: []
+			datas: [],
+			displayData: [],
+			found: true
 		}
 	}
 	componentWillMount() {
@@ -22,7 +26,7 @@ export default class DisplayContext extends Component {
         data['key'] = childSnapshot.key;
         datas.push(data);
       })
-      this.setState({datas: datas})
+      this.setState({datas: datas,displayData: datas})
     })
 	}
 	getUrl (array) {
@@ -41,27 +45,72 @@ export default class DisplayContext extends Component {
 		return tagsArray
 	}
 
-	getStyle () {
-		let style ={
-			divStyle : {
-				border: "2px solid rgba(166, 228, 252, 1)",
-				borderRadius: 10,
-				marginTop: 20,
-				marginBottom: 20,
-				marginLeft: "auto",
-				marginRight: "auto",
-				display: "block"
+	handleSearch = (searchItem) => {
+		let searchArray = []
+		this.state.datas.forEach((data)=>{
+			if(data.description.toLowerCase().indexOf(searchItem) !== -1 || data.title.toLowerCase().indexOf(searchItem) !== -1){
+				searchArray.push(data)
 			}
+		})
+		if(searchArray.length === 0)
+		{
+			this.setState({found: false})
 		}
-	return style
+		else {
+			this.setState({found: true})
+		}
+		this.setState({displayData: searchArray})
+	}
+	handleCancelSearch = () => {
+		this.setState({displayData: this.state.datas})
+		if(!this.state.found){
+			this.setState({found: true})
+		}
+	}
+	handleSort = (option) => {
+		let array
+		if(option === 2) {
+			array = this.state.displayData.sort(function(a,b){
+  			return new Date(b.time) - new Date(a.time)
+			})
+			this.setState({displayData: array})
+		}
+		if(option === 1) {
+			array = this.state.displayData.sort(function(a,b){
+  			return new Date(a.time) - new Date(b.time)
+			})
+			this.setState({displayData: array})
+		}
+		if(option === 3) {
+			array = this.state.displayData.sort((a,b)=>{
+				return a.title > b.title
+			})
+			this.setState({displayData: array})
+		}
+		if(option === 4) {
+			array = this.state.displayData.sort((a,b)=>{
+				return b.title > a.title
+			})
+			this.setState({displayData: array})
+		}
+
 	}
 	render(){
-		let styles = this.getStyle()
 		let displayBlock = []
-		this.state.datas.forEach((data)=>{
+		this.state.displayData.forEach((data)=>{
 			displayBlock.push(
-				<div className="row" style={styles.divStyle} key={data.key}>
+				<div className="row" style={{
+					border: data.choice === 1 ? "2px solid rgba(166, 228, 252, 1)" : ( data.choice === 2 ? "2px solid rgb(255, 153, 153)" : "2px solid rgb(238, 204, 255)"),
+					borderRadius: 10,
+					marginTop: 20,
+					marginBottom: 20,
+					marginLeft: "auto",
+					marginRight: "auto",
+					display: "block"
+					}}
+				key={data.key}>
 					<div className="col-md-12" >
+						{ data.choice === 2 ? <p style={{float: "right", color: "rgb(255, 153, 153)"}}> Friends only </p> : (data.choice === 3 ? <p style={{float: "right", color: "rgb(238, 204, 255)"}}> Me only </p> : null)}
 						<h2 style={{fontWeight: "bold"}}> {data.title} </h2>
 						<p> {data.description? data.description : "No discription"}</p>
 						<div className="row">
@@ -88,9 +137,19 @@ export default class DisplayContext extends Component {
 				)
 		})
 
-
+		if(!this.state.found){
+			displayBlock = <div style={{fontSize: 30, color: "rgba(0,0,0,0.54)"}}><h1>Data not found </h1></div>
+		}
 		return(
 			<div className="container" style={{display: "block"}}>
+						<div className="row" style={{display: "flex"}}>
+							<div className="col-md-12">
+								<SearchBar onSearch={this.handleSearch} onCancelSearch={this.handleCancelSearch}/>
+							</div>
+							<div className="col-md-12">
+								<OrderData onSort={this.handleSort}/>
+							</div>
+						</div>
 						{displayBlock}
 			</div>)
 	}
