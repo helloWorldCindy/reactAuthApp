@@ -13,7 +13,8 @@ export default class DisplayContext extends Component {
 		this.state = {
 			datas: [],
 			displayData: [],
-			found: true
+			found: true,
+			count: 0
 		}
 	}
 	componentWillMount() {
@@ -28,6 +29,9 @@ export default class DisplayContext extends Component {
       })
       this.setState({datas: datas,displayData: datas})
     })
+    return firebase.database().ref('/users/' + userId + '/info').on('value', function(snapshot) {
+      this.setState({count: snapshot.val().count})
+    }.bind(this));
 	}
 	getUrl (array) {
 		let urlArray = []
@@ -131,7 +135,9 @@ export default class DisplayContext extends Component {
 						</div>
 						<RaisedButton primary={true} style={{marginBottom: 10}} label="Delete" onTouchTap={(e)=>{
 							var userId = firebase.auth().currentUser.uid
-							firebase.database().ref('/users/' + userId + '/data').child(data.key).remove()}} />
+							firebase.database().ref('/users/' + userId + '/data').child(data.key).remove()
+							firebase.database().ref('users/' + userId + '/info' ).update({count:this.state.count - 1})
+							}} />
 					</div>
 				</div>
 				)

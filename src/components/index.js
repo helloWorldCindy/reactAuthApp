@@ -63,7 +63,7 @@ export default class App extends Component {
           <MuiThemeProvider>
           <div>
             <nav className="navbar navbar-default navbar-static-top ">
-              <div className="container" style={{marginTop: 10}}>
+              <div className="container-fluid" style={{marginTop: 10}}>
                 <div className="navbar-header">
                   <Link to="/" className="navbar-brand" >My notebook</Link>
                 </div>
@@ -77,7 +77,6 @@ export default class App extends Component {
                           onClick={() => {
                             logout()
                             this.setState({authed: false})
-                            Router.transitionTo('/')
                           }} />
                       : <span>
                           <Link to="/login" className="navbar-brand">Login</Link>

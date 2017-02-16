@@ -37,7 +37,11 @@ export default class Register extends Component {
         email: user.email,
         name: this.state.name,
         uid: user.uid,
-        img: ''
+        img: 'http://lentech.org/images/no_avatar.png',
+        follower: 0,
+        following: 0,
+        description: "There is no description",
+        count: 0
       });
     })
     .catch((error) => {

@@ -30,7 +30,11 @@ export function signInGoogle () {
     ref.child(`users/${user.uid}/info`).set({
       email: user.email,
       name: user.email,
-      uid: user.uid
+      uid: user.uid,
+      follower: 0,
+      following: 0,
+      description: "There is no description",
+      count: 0
     });
   }).catch(function(error) {
     console.log(error.message)
@@ -45,7 +49,11 @@ export function signInFacebook () {
     ref.child(`users/${user.uid}/info`).set({
       email: "",
       name: user.displayName,
-      uid: user.uid
+      uid: user.uid,
+      follower: 0,
+      following: 0,
+      description: "There is no description",
+      count: 0
     });
   }).catch(function(error) {
     console.log(error.message)

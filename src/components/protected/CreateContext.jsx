@@ -25,8 +25,15 @@ export default class CreateContext extends Component {
       save: false,
       tags: [],
       title: "Unnamed",
-      choice: 1
+      choice: 1,
+      count: 0
     }
+  }
+  componentWillMount() {
+    var userId = firebase.auth().currentUser.uid;
+    return firebase.database().ref('/users/' + userId + '/info').on('value', function(snapshot) {
+      this.setState({count: snapshot.val().count})
+    }.bind(this));
   }
   //open edit area
   handleOpen = (e) => {
@@ -56,6 +63,7 @@ export default class CreateContext extends Component {
       save: false,
       choice: 1,
       title: "Unnamed"}))
+    firebase.database().ref('users/' + userId + '/info' ).update({count:this.state.count + 1})
   }
   //close edit area without saving data
   handleUnsaveClose = (e) => {
@@ -158,7 +166,8 @@ export default class CreateContext extends Component {
     }
     return (
       <div>
-        <AppBar 
+        <AppBar
+          style={{zIndex:0}}
           title={ this.state.editing ? <TextField hintText="Enter title ..."
                   underlineShow={false}
                   inputStyle={{color: "white",fontSize: 20, fontWeight: "bold"}}
